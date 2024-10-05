@@ -1,10 +1,10 @@
-tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
-
-print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+def afisare_tabla_joc():
+    print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
 
 def joc_castigat():
     este_castigat = False
     castigatorul = None
+
     if tabla[1] == tabla[2] == tabla[3] and tabla[1] != '':
         este_castigat = True
         castigatorul = tabla[1]
@@ -33,7 +33,7 @@ def joc_castigat():
     return este_castigat, castigatorul
 
 # Functie introducere X sau O
-def input_mutare(mutare):
+def adauga_mutare(mutare):
     poz_mutare = int(input(f"{mutare}: "))
     if tabla[poz_mutare] != '':
         while tabla[poz_mutare] != '':
@@ -46,20 +46,23 @@ def input_mutare(mutare):
 # Functie afisare intrebare resetare joc
 def intrebare_repeta_jocul():
     rasp = input('Vrei sa repeti jocul (Y/N) ?: ')
-    while rasp.upper() != 'Y' or rasp.upper() != 'N':
+    while rasp.upper() != 'Y' and rasp.upper() != 'N':
         rasp = input('Vrei sa repeti jocul (Y/N) ?: ')
     return rasp
 
 # main
+tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+afisare_tabla_joc()
+
 joc_finalizat = False
 tabla_este_plina = False
 
 while joc_finalizat is False and tabla_este_plina is False:
-    input_mutare('X')
+    adauga_mutare('X')
+    afisare_tabla_joc()
 
-    joc_terminat = joc_castigat() # True, X / False, None
+    joc_terminat = joc_castigat() # returneaza (True, X) / (False, None)
     joc_finalizat = joc_terminat[0]
-    print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
 
     if joc_finalizat:
         print(f'Joc incheiat. Castigatorul este {joc_terminat[1]}')
@@ -72,8 +75,8 @@ while joc_finalizat is False and tabla_este_plina is False:
         elif intrebare.upper() == 'Y':
             joc_finalizat = False
             tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
-            input_mutare('X')
-            print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+            adauga_mutare('X')
+            afisare_tabla_joc()
         # END resetare
     else:
         tabla_are_spatii_goale = True
@@ -94,20 +97,20 @@ while joc_finalizat is False and tabla_este_plina is False:
                     joc_finalizat = False
                     tabla_este_plina = False
                     tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
-                    input_mutare('X')
-                    print(
-                        f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+
+                    adauga_mutare('X')
+                    afisare_tabla_joc()
                 # END resetare
 
     if tabla_este_plina is True:
         break
 
     # mutare_calculator()
-    input_mutare('O')
+    adauga_mutare('O')
 
-    joc_terminat = joc_castigat()  # (True, X) / False, None
+    joc_terminat = joc_castigat() # returneaza (True, X) / (False, None)
     joc_finalizat = joc_terminat[0]
-    print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+    afisare_tabla_joc()
 
     if joc_finalizat:
         print(f'Jocul s-a incheiat. Castigatorul este {joc_terminat[1]}')
@@ -120,9 +123,8 @@ while joc_finalizat is False and tabla_este_plina is False:
         elif intrebare.upper() == 'Y':
             joc_finalizat = False
             tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
-            input_mutare('X')
-            print(
-                f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+            adauga_mutare('X')
+            afisare_tabla_joc()
         # END resetare
 
     if tabla_este_plina is True:
