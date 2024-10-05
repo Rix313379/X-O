@@ -2,22 +2,6 @@ tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
 
 print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
 
-
-
-# print(tabla[3])
-# print(tabla[int(poz_x)])
-def input_x():
-    poz_x = int(input("Pozitia X: "))
-    if tabla[poz_x] != '':
-        while tabla[poz_x] != '':
-            poz_x = int(input("Pozitie ocupata. Introdu pozitie noua: "))
-            tabla[poz_x] = 'X'
-            break
-    else:
-        tabla[poz_x] = 'X'
-
-joc_finalizat = False
-
 def joc_castigat():
     este_castigat = False
     castigatorul = None
@@ -46,12 +30,102 @@ def joc_castigat():
         este_castigat = True
         castigatorul = tabla[3]
 
-    return (este_castigat, castigatorul)
+    return este_castigat, castigatorul
 
-while joc_finalizat is False:
-    input_x()
+# Functie introducere X sau O
+def input_mutare(mutare):
+    poz_mutare = int(input(f"{mutare}: "))
+    if tabla[poz_mutare] != '':
+        while tabla[poz_mutare] != '':
+            poz_mutare = int(input("Pozitie ocupata. Introdu pozitie noua: "))
+            tabla[poz_mutare] = mutare
+            break
+    else:
+        tabla[poz_mutare] = mutare
+
+# Functie afisare intrebare resetare joc
+def intrebare_repeta_jocul():
+    rasp = input('Vrei sa repeti jocul (Y/N) ?: ')
+    while rasp.upper() != 'Y' or rasp.upper() != 'N':
+        rasp = input('Vrei sa repeti jocul (Y/N) ?: ')
+    return rasp
+
+# main
+joc_finalizat = False
+tabla_este_plina = False
+
+while joc_finalizat is False and tabla_este_plina is False:
+    input_mutare('X')
+
     joc_terminat = joc_castigat() # True, X / False, None
     joc_finalizat = joc_terminat[0]
-    # mutare_calculator()
     print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
-    print(f'S-a terminat? {joc_terminat}')
+
+    if joc_finalizat:
+        print(f'Joc incheiat. Castigatorul este {joc_terminat[1]}')
+
+        # resetare joc dupa terminare runda
+        intrebare = intrebare_repeta_jocul()
+
+        if intrebare.upper() == 'N':
+            break # iese din while
+        elif intrebare.upper() == 'Y':
+            joc_finalizat = False
+            tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+            input_mutare('X')
+            print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+        # END resetare
+    else:
+        tabla_are_spatii_goale = True
+        for i in tabla:
+            if tabla[i] == '':
+                tabla_are_spatii_goale = False
+                break
+            elif i == len(tabla):
+                tabla_este_plina = True
+                print('Este remiza.')
+
+                # resetare joc dupa terminare runda
+                intrebare = intrebare_repeta_jocul()
+
+                if intrebare.upper() == 'N':
+                    break  # iese din while
+                elif intrebare.upper() == 'Y':
+                    joc_finalizat = False
+                    tabla_este_plina = False
+                    tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+                    input_mutare('X')
+                    print(
+                        f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+                # END resetare
+
+    if tabla_este_plina is True:
+        break
+
+    # mutare_calculator()
+    input_mutare('O')
+
+    joc_terminat = joc_castigat()  # (True, X) / False, None
+    joc_finalizat = joc_terminat[0]
+    print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+
+    if joc_finalizat:
+        print(f'Jocul s-a incheiat. Castigatorul este {joc_terminat[1]}')
+
+        # resetare joc dupa terminare runda
+        intrebare = intrebare_repeta_jocul()
+
+        if intrebare.upper() == 'N':
+            break  # iese din while
+        elif intrebare.upper() == 'Y':
+            joc_finalizat = False
+            tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+            input_mutare('X')
+            print(
+                f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+        # END resetare
+
+    if tabla_este_plina is True:
+        break
+
+# Caz remiza: 123546879
