@@ -122,3 +122,4 @@ def mutare_calculator(parametru: {}):
         return
 
 mutare_calculator(tabla)
+
