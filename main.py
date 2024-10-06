@@ -43,8 +43,6 @@ center = 5
 corners = [1, 3, 7, 9]
 edges = [2, 4, 6, 8]
 
-#
-
 def counting (lista):
     return lista.count('x'), lista.count('0')
 
