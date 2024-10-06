@@ -122,6 +122,7 @@ def play_hard(tabla):
 
             if count_X == 2 and poz_disponibila != 0:
                 tabla[poz_disponibila] = '0'
+
                 # print(f"am contracarat pe pozitia {poz_disponibila}")
                 return
 
@@ -187,29 +188,79 @@ moves = [[1, 2, 3],  # Linia 1
          [1, 5, 9],  # Diagonala 1
          [3, 5, 7]]  # Diagonala 2
 
-# moves = [[tabla[1], tabla[2], tabla[3]],
-#          [tabla[4], tabla[5], tabla[6]],
-#          [tabla[7], tabla[8], tabla[9]],
-#          [tabla[1], tabla[4], tabla[7]],
-#          [tabla[2], tabla[5], tabla[6]],
-#          [tabla[3], tabla[6], tabla[9]],
-#          [tabla[1], tabla[5], tabla[9]],
-#          [tabla[3], tabla[5], tabla[7]]]
+joc_finalizat = False
+tabla_este_plina = False
 
-#pozitii strategice
-center = 5
-corners = [1, 3, 7, 9]
-edges = [2, 4, 6, 8]
+while joc_finalizat is False and tabla_este_plina is False:
+    adauga_mutare('X')
+    # afisare_tabla_joc()
 
-def counting (lista):
-    return lista.count('x'), lista.count('0')
+    joc_terminat = joc_castigat()  # returneaza (True, X) / (False, None)
+    joc_finalizat = joc_terminat[0]
 
-for i,v in enumerate(moves):
-    print(counting(moves[i]))
+    if joc_finalizat:
+        print(f'Joc incheiat. Castigatorul este {joc_terminat[1]}')
 
-if tabla[5] == '':
-    tabla[5] = '0'
-elif tabla[5] == 'x':
-    if "" in corners:
-        print("trueee")
-        
+        # resetare joc dupa terminare runda
+        intrebare = intrebare_repeta_jocul()
+
+        if intrebare.upper() == 'N':
+            break  # iese din while
+        elif intrebare.upper() == 'Y':
+            joc_finalizat = False
+            tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+            level = intrebare_dificultate_joc()
+            adauga_mutare('X')
+            # afisare_tabla_joc()
+        # END resetare
+    else:
+        tabla_are_spatii_goale = True
+        for i in tabla:
+            if tabla[i] == '':
+                tabla_are_spatii_goale = False
+                break
+            elif i == len(tabla):
+                tabla_este_plina = True
+                print('Este remiza.')
+
+                # resetare joc dupa terminare runda
+                intrebare = intrebare_repeta_jocul()
+
+                if intrebare.upper() == 'N':
+                    break  # iese din while
+                elif intrebare.upper() == 'Y':
+                    joc_finalizat = False
+                    tabla_este_plina = False
+                    tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+                    level = intrebare_dificultate_joc()
+                    adauga_mutare('X')
+                    # afisare_tabla_joc()
+                # END resetare
+
+    if tabla_este_plina is True:
+        break
+
+    mutare_calculator(level, tabla)
+
+    joc_terminat = joc_castigat()  # returneaza (True, X) / (False, None)
+    joc_finalizat = joc_terminat[0]
+    afisare_tabla_joc()
+
+    if joc_finalizat:
+        print(f'Jocul s-a incheiat. Castigatorul este {joc_terminat[1]}')
+
+        # resetare joc dupa terminare runda
+        intrebare = intrebare_repeta_jocul()
+
+        if intrebare.upper() == 'N':
+            break  # iese din while
+        elif intrebare.upper() == 'Y':
+            joc_finalizat = False
+            tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+            level = intrebare_dificultate_joc()
+        # END resetare
+
+    if tabla_este_plina is True:
+        break
+
+# Caz remiza: 1 9 3 8 4
