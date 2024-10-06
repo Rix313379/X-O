@@ -17,9 +17,9 @@ Pas 5 Margini: Calculatorul alege o pozitie libera din locurile ramase
 import random
 
 # tabla de joc
-tabla = {1: "x", 2: "", 3: "0",
-         4: "0", 5: "0", 6: "",
-         7: "x", 8: "", 9: ""}
+tabla = {1: "x", 2: "x", 3: "0",
+         4: "", 5: "0", 6: "",
+         7: "", 8: "", 9: "0"}
 
 # combinatii castigatoare
 moves = [[1, 2, 3],  # Linia 1
@@ -65,7 +65,7 @@ def mutare_calculator(parametru: {}):
             elif tabla[pozitie] == '':
                 poz_disponibila = pozitie
 
-        if count_0 == 2 and count_X == 0:
+        if count_0 == 2 and poz_disponibila != 0:
             tabla[poz_disponibila] = '0'
             print(f"am castigat cu pozitia {poz_disponibila}")
             return
@@ -83,7 +83,7 @@ def mutare_calculator(parametru: {}):
             elif tabla[pozitie] == '':
                 poz_disponibila = pozitie
 
-            if count_X == 2 and count_0 == 0:
+            if count_X == 2 and poz_disponibila != 0:
                 tabla[poz_disponibila] = '0'
                 print(f"am contracarat pe pozitia {poz_disponibila}")
                 return
