@@ -16,51 +16,53 @@ Pas 5 Margini: Calculatorul alege o pozitie libera din locurile ramase
 
 import random
 
-def afisare_tabla_joc():
-    print(
-        f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
-
-def joc_castigat():
+def afisare_tabla_joc(param_tabla):
+    
+    return f"{param_tabla[1]} | {param_tabla[2]} | {param_tabla[3]}\n---------\n{param_tabla[4]} | {param_tabla[5]} | {param_tabla[6]}\n---------\n{param_tabla[7]} | {param_tabla[8]} | {param_tabla[9]}"
+    
+    
+def joc_castigat(param_tabla):
     este_castigat = False
     castigatorul = None
 
-    if tabla[1] == tabla[2] == tabla[3] and tabla[1] != '':
+    if param_tabla[1] == param_tabla[2] == param_tabla[3] and param_tabla[1] != '':
         este_castigat = True
-        castigatorul = tabla[1]
-    if tabla[4] == tabla[5] == tabla[6] and tabla[4] != '':
+        castigatorul = param_tabla[1]
+    if param_tabla[4] == param_tabla[5] == param_tabla[6] and param_tabla[4] != '':
         este_castigat = True
-        castigatorul = tabla[4]
-    if tabla[7] == tabla[8] == tabla[9] and tabla[7] != '':
+        castigatorul = param_tabla[4]
+    if param_tabla[7] == param_tabla[8] == param_tabla[9] and param_tabla[7] != '':
         este_castigat = True
-        castigatorul = tabla[7]
-    if tabla[1] == tabla[4] == tabla[7] and tabla[1] != '':
+        castigatorul = param_tabla[7]
+    if param_tabla[1] == param_tabla[4] == param_tabla[7] and param_tabla[1] != '':
         este_castigat = True
-        castigatorul = tabla[1]
-    if tabla[2] == tabla[5] == tabla[8] and tabla[2] != '':
+        castigatorul = param_tabla[1]
+    if param_tabla[2] == param_tabla[5] == param_tabla[8] and param_tabla[2] != '':
         este_castigat = True
-        castigatorul = tabla[2]
-    if tabla[3] == tabla[6] == tabla[9] and tabla[3] != '':
+        castigatorul = param_tabla[2]
+    if param_tabla[3] == param_tabla[6] == param_tabla[9] and param_tabla[3] != '':
         este_castigat = True
-        castigatorul = tabla[3]
-    if tabla[1] == tabla[5] == tabla[9] and tabla[1] != '':
+        castigatorul = param_tabla[3]
+    if param_tabla[1] == param_tabla[5] == param_tabla[9] and param_tabla[1] != '':
         este_castigat = True
-        castigatorul = tabla[1]
-    if tabla[3] == tabla[5] == tabla[7] and tabla[3] != '':
+        castigatorul = param_tabla[1]
+    if param_tabla[3] == param_tabla[5] == param_tabla[7] and param_tabla[3] != '':
         este_castigat = True
-        castigatorul = tabla[3]
+        castigatorul = param_tabla[3]
 
     return este_castigat, castigatorul
 
 # Functie introducere X sau O
-def adauga_mutare(mutare):
+def adauga_mutare(mutare, param_tabla):
     poz_mutare = int(input(f"{mutare}: "))
-    if tabla[poz_mutare] != '':
-        while tabla[poz_mutare] != '':
+    if param_tabla[poz_mutare] != '':
+        while param_tabla[poz_mutare] != '':
             poz_mutare = int(input("Pozitie ocupata. Introdu pozitie noua: "))
-            tabla[poz_mutare] = mutare
+            param_tabla[poz_mutare] = mutare
             break
     else:
-        tabla[poz_mutare] = mutare
+        param_tabla[poz_mutare] = mutare
+    return param_tabla
 
 # Functie afisare intrebare resetare joc
 def intrebare_repeta_jocul():
@@ -77,105 +79,108 @@ def intrebare_dificultate_joc():
     return rasp
 
 # Algoritm mutare calculator
-def mutare_calculator(dificultate, tabla):
+def mutare_calculator(dificultate, param_tabla, param_moves):
     if dificultate.upper() == 'USOR':
-        play_easy(tabla)
+        param_tabla = play_easy(param_tabla, param_moves)
     elif dificultate.upper() == 'GREU':
-        play_hard(tabla)
+        param_tabla = play_hard(param_tabla, param_moves)
+    
+    return param_tabla
+    
 
-def play_hard(tabla):
+def play_hard(param_tabla, param_moves):
     # pozitii strategice
     center = 5
     corners = [1, 3, 7, 9]
     edges = [2, 4, 6, 8]
 
     # Verifica daca poate castiga calculatorul - ofensiva
-    for move in moves:
+    for move in param_moves:
         count_X = 0
         count_0 = 0
         poz_disponibila = 0
         for pozitie in move:
-            if tabla[pozitie] == '0':
+            if param_tabla[pozitie] == '0':
                 count_0 += 1
-            elif tabla[pozitie].upper() == 'X':
+            elif param_tabla[pozitie].upper() == 'X':
                 count_X += 1
-            elif tabla[pozitie] == '':
+            elif param_tabla[pozitie] == '':
                 poz_disponibila = pozitie
 
         if count_0 == 2 and poz_disponibila != 0:
-            tabla[poz_disponibila] = '0'
+            param_tabla[poz_disponibila] = '0'
             # print(f"am castigat cu pozitia {poz_disponibila}")
-            return
+            return param_tabla
 
     # Daca jucatorul poate castiga la urmatoarea mutare - defensiva
-    for move in moves:
+    for move in param_moves:
         count_X = 0
         count_0 = 0
         poz_disponibila = 0
         for pozitie in move:
-            if tabla[pozitie] == '0':
+            if param_tabla[pozitie] == '0':
                 count_0 += 1
-            elif tabla[pozitie].upper() == 'X':
+            elif param_tabla[pozitie].upper() == 'X':
                 count_X += 1
-            elif tabla[pozitie] == '':
+            elif param_tabla[pozitie] == '':
                 poz_disponibila = pozitie
 
             if count_X == 2 and poz_disponibila != 0:
-                tabla[poz_disponibila] = '0'
+                param_tabla[poz_disponibila] = '0'
                 # print(f"am contracarat pe pozitia {poz_disponibila}")
-                return
+                return param_tabla
 
     # Ocupa pozitia centrala
-    if tabla[center] == '':
-        tabla[center] = '0'
+    if param_tabla[center] == '':
+        param_tabla[center] = '0'
         # print("0 pe pozitia centrala")
-        return
+        return param_tabla
 
     # Ocupa prima pozitia din colturi gasita
     lista = []
     for pozitie in corners:
-        if tabla[pozitie] == '':
+        if param_tabla[pozitie] == '':
             lista.append(pozitie)
-            # tabla[pozitie] = '0'
+            # param_tabla[pozitie] = '0'
             # break
 
     if len(lista) != 0:
         pozitie = random.choice(lista)
-        tabla[pozitie] = '0'
+        param_tabla[pozitie] = '0'
         # print(f"0 pe poztia {pozitie}")
-        return
+        return param_tabla
 
     # Ocupa prima pozitia din edges gasita
     lista = []
     for pozitie in edges:
-        if tabla[pozitie] == '':
+        if param_tabla[pozitie] == '':
             lista.append(pozitie)
-            # tabla[pozitie] = '0'
+            # param_tabla[pozitie] = '0'
             # break
     if len(lista) != 0:
         pozitie = random.choice(lista)
-        tabla[pozitie] = '0'
+        param_tabla[pozitie] = '0'
         # print(f"0 pe pozitia {pozitie}")
-        return
-
-def play_easy(tabla):
+        return param_tabla
+    
+def play_easy(param_tabla, param_moves):
     lista = []
-    for move in moves:
+    for move in param_moves:
         for pozitie in move:
-            if tabla[pozitie] == '':
+            if param_tabla[pozitie] == '':
                 lista.append(pozitie)
 
     if len(lista) != 0:
         pozitie = random.choice(lista)
-        tabla[pozitie] = '0'
+        param_tabla[pozitie] = '0'
         # print(f"0 pe pozitia {pozitie}")
-        return
+        return param_tabla
 
 # main
 tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
 
 level = intrebare_dificultate_joc()
-afisare_tabla_joc()
+print(afisare_tabla_joc(tabla))
 
 # combinatii castigatoare
 moves = [[1, 2, 3],  # Linia 1
@@ -191,10 +196,10 @@ joc_finalizat = False
 tabla_este_plina = False
 
 while joc_finalizat is False and tabla_este_plina is False:
-    adauga_mutare('X')
+    adauga_mutare('X', tabla)
     # afisare_tabla_joc()
 
-    joc_terminat = joc_castigat()  # returneaza (True, X) / (False, None)
+    joc_terminat = joc_castigat(tabla)  # returneaza (True, X) / (False, None)
     joc_finalizat = joc_terminat[0]
 
     if joc_finalizat:
@@ -209,7 +214,7 @@ while joc_finalizat is False and tabla_este_plina is False:
             joc_finalizat = False
             tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
             level = intrebare_dificultate_joc()
-            adauga_mutare('X')
+            adauga_mutare('X', tabla)
             # afisare_tabla_joc()
         # END resetare
     else:
@@ -232,18 +237,18 @@ while joc_finalizat is False and tabla_este_plina is False:
                     tabla_este_plina = False
                     tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
                     level = intrebare_dificultate_joc()
-                    adauga_mutare('X')
+                    adauga_mutare('X', tabla)
                     # afisare_tabla_joc()
                 # END resetare
 
     if tabla_este_plina is True:
         break
 
-    mutare_calculator(level, tabla)
+    mutare_calculator(level, tabla, moves)
 
-    joc_terminat = joc_castigat()  # returneaza (True, X) / (False, None)
+    joc_terminat = joc_castigat(tabla)  # returneaza (True, X) / (False, None)
     joc_finalizat = joc_terminat[0]
-    afisare_tabla_joc()
+    print(afisare_tabla_joc(tabla))
 
     if joc_finalizat:
         print(f'Jocul s-a incheiat. Castigatorul este {joc_terminat[1]}')
