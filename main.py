@@ -21,34 +21,14 @@ def afisare_tabla_joc(param_tabla):
     return f"{param_tabla[1]} | {param_tabla[2]} | {param_tabla[3]}\n---------\n{param_tabla[4]} | {param_tabla[5]} | {param_tabla[6]}\n---------\n{param_tabla[7]} | {param_tabla[8]} | {param_tabla[9]}"
     
     
-def joc_castigat(param_tabla):
+def joc_castigat(param_tabla, param_moves):
     este_castigat = False
     castigatorul = None
 
-    if param_tabla[1] == param_tabla[2] == param_tabla[3] and param_tabla[1] != '':
-        este_castigat = True
-        castigatorul = param_tabla[1]
-    if param_tabla[4] == param_tabla[5] == param_tabla[6] and param_tabla[4] != '':
-        este_castigat = True
-        castigatorul = param_tabla[4]
-    if param_tabla[7] == param_tabla[8] == param_tabla[9] and param_tabla[7] != '':
-        este_castigat = True
-        castigatorul = param_tabla[7]
-    if param_tabla[1] == param_tabla[4] == param_tabla[7] and param_tabla[1] != '':
-        este_castigat = True
-        castigatorul = param_tabla[1]
-    if param_tabla[2] == param_tabla[5] == param_tabla[8] and param_tabla[2] != '':
-        este_castigat = True
-        castigatorul = param_tabla[2]
-    if param_tabla[3] == param_tabla[6] == param_tabla[9] and param_tabla[3] != '':
-        este_castigat = True
-        castigatorul = param_tabla[3]
-    if param_tabla[1] == param_tabla[5] == param_tabla[9] and param_tabla[1] != '':
-        este_castigat = True
-        castigatorul = param_tabla[1]
-    if param_tabla[3] == param_tabla[5] == param_tabla[7] and param_tabla[3] != '':
-        este_castigat = True
-        castigatorul = param_tabla[3]
+    for move in param_moves:
+        if param_tabla[move[0]] == param_tabla[move[1]] == param_tabla[move[2]] and param_tabla[move[1]] != '':
+            este_castigat = True
+            castigatorul = param_tabla[move[0]]
 
     return este_castigat, castigatorul
 
@@ -84,9 +64,9 @@ def mutare_calculator(dificultate, param_tabla, param_moves):
         param_tabla = play_easy(param_tabla, param_moves)
     elif dificultate.upper() == 'GREU':
         param_tabla = play_hard(param_tabla, param_moves)
-    
+
     return param_tabla
-    
+
 
 def play_hard(param_tabla, param_moves):
     # pozitii strategice
@@ -162,7 +142,7 @@ def play_hard(param_tabla, param_moves):
         param_tabla[pozitie] = '0'
         # print(f"0 pe pozitia {pozitie}")
         return param_tabla
-    
+
 def play_easy(param_tabla, param_moves):
     lista = []
     for move in param_moves:
@@ -193,13 +173,12 @@ moves = [[1, 2, 3],  # Linia 1
          [3, 5, 7]]  # Diagonala 2
 
 joc_finalizat = False
-tabla_este_plina = False
 
-while joc_finalizat is False and tabla_este_plina is False:
+while True:
     adauga_mutare('X', tabla)
     # afisare_tabla_joc()
 
-    joc_terminat = joc_castigat(tabla)  # returneaza (True, X) / (False, None)
+    joc_terminat = joc_castigat(tabla, moves)  # returneaza (True, X) / (False, None)
     joc_finalizat = joc_terminat[0]
 
     if joc_finalizat:
@@ -218,35 +197,25 @@ while joc_finalizat is False and tabla_este_plina is False:
             # afisare_tabla_joc()
         # END resetare
     else:
-        tabla_are_spatii_goale = True
-        for i in tabla:
-            if tabla[i] == '':
-                tabla_are_spatii_goale = False
-                break
-            elif i == len(tabla):
-                tabla_este_plina = True
-                print('Este remiza.')
+        if '' not in tabla.values():
+            print('Este remiza.')
 
-                # resetare joc dupa terminare runda
-                intrebare = intrebare_repeta_jocul()
+            # resetare joc dupa terminare runda
+            intrebare = intrebare_repeta_jocul()
 
-                if intrebare.upper() == 'N':
-                    break  # iese din while
-                elif intrebare.upper() == 'Y':
-                    joc_finalizat = False
-                    tabla_este_plina = False
-                    tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
-                    level = intrebare_dificultate_joc()
-                    adauga_mutare('X', tabla)
-                    # afisare_tabla_joc()
-                # END resetare
-
-    if tabla_este_plina is True:
-        break
+            if intrebare.upper() == 'N':
+                break  # iese din while
+            elif intrebare.upper() == 'Y':
+                joc_finalizat = False
+                tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+                level = intrebare_dificultate_joc()
+                adauga_mutare('X')
+                # afisare_tabla_joc()
+            # END resetare
 
     mutare_calculator(level, tabla, moves)
 
-    joc_terminat = joc_castigat(tabla)  # returneaza (True, X) / (False, None)
+    joc_terminat = joc_castigat(tabla, moves)  # returneaza (True, X) / (False, None)
     joc_finalizat = joc_terminat[0]
     print(afisare_tabla_joc(tabla))
 
@@ -263,8 +232,5 @@ while joc_finalizat is False and tabla_este_plina is False:
             tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
             level = intrebare_dificultate_joc()
         # END resetare
-
-    if tabla_este_plina is True:
-        break
 
 # Caz remiza: 1 9 3 8 4
