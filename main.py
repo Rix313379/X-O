@@ -17,37 +17,17 @@ Pas 5 Margini: Calculatorul alege o pozitie libera din locurile ramase
 import random
 
 def afisare_tabla_joc():
-    print(
-        f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+    print(f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}")
+    # return f"{tabla[1]} | {tabla[2]} | {tabla[3]}\n---------\n{tabla[4]} | {tabla[5]} | {tabla[6]}\n---------\n{tabla[7]} | {tabla[8]} | {tabla[9]}"
 
-def joc_castigat():
+def joc_castigat(tabla, param_moves):
     este_castigat = False
     castigatorul = None
 
-    if tabla[1] == tabla[2] == tabla[3] and tabla[1] != '':
-        este_castigat = True
-        castigatorul = tabla[1]
-    if tabla[4] == tabla[5] == tabla[6] and tabla[4] != '':
-        este_castigat = True
-        castigatorul = tabla[4]
-    if tabla[7] == tabla[8] == tabla[9] and tabla[7] != '':
-        este_castigat = True
-        castigatorul = tabla[7]
-    if tabla[1] == tabla[4] == tabla[7] and tabla[1] != '':
-        este_castigat = True
-        castigatorul = tabla[1]
-    if tabla[2] == tabla[5] == tabla[8] and tabla[2] != '':
-        este_castigat = True
-        castigatorul = tabla[2]
-    if tabla[3] == tabla[6] == tabla[9] and tabla[3] != '':
-        este_castigat = True
-        castigatorul = tabla[3]
-    if tabla[1] == tabla[5] == tabla[9] and tabla[1] != '':
-        este_castigat = True
-        castigatorul = tabla[1]
-    if tabla[3] == tabla[5] == tabla[7] and tabla[3] != '':
-        este_castigat = True
-        castigatorul = tabla[3]
+    for move in param_moves:
+        if tabla[move[0]] == tabla[move[1]] == tabla[move[2]] and tabla[move[1]] != '':
+            este_castigat = True
+            castigatorul = tabla[move[0]]
 
     return este_castigat, castigatorul
 
@@ -188,13 +168,12 @@ moves = [[1, 2, 3],  # Linia 1
          [3, 5, 7]]  # Diagonala 2
 
 joc_finalizat = False
-tabla_este_plina = False
 
-while joc_finalizat is False and tabla_este_plina is False:
+while True:
     adauga_mutare('X')
     # afisare_tabla_joc()
 
-    joc_terminat = joc_castigat()  # returneaza (True, X) / (False, None)
+    joc_terminat = joc_castigat(tabla, moves)  # returneaza (True, X) / (False, None)
     joc_finalizat = joc_terminat[0]
 
     if joc_finalizat:
@@ -213,35 +192,25 @@ while joc_finalizat is False and tabla_este_plina is False:
             # afisare_tabla_joc()
         # END resetare
     else:
-        tabla_are_spatii_goale = True
-        for i in tabla:
-            if tabla[i] == '':
-                tabla_are_spatii_goale = False
-                break
-            elif i == len(tabla):
-                tabla_este_plina = True
-                print('Este remiza.')
+        if '' not in tabla.values():
+            print('Este remiza.')
 
-                # resetare joc dupa terminare runda
-                intrebare = intrebare_repeta_jocul()
+            # resetare joc dupa terminare runda
+            intrebare = intrebare_repeta_jocul()
 
-                if intrebare.upper() == 'N':
-                    break  # iese din while
-                elif intrebare.upper() == 'Y':
-                    joc_finalizat = False
-                    tabla_este_plina = False
-                    tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
-                    level = intrebare_dificultate_joc()
-                    adauga_mutare('X')
-                    # afisare_tabla_joc()
-                # END resetare
-
-    if tabla_este_plina is True:
-        break
+            if intrebare.upper() == 'N':
+                break  # iese din while
+            elif intrebare.upper() == 'Y':
+                joc_finalizat = False
+                tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+                level = intrebare_dificultate_joc()
+                adauga_mutare('X')
+                # afisare_tabla_joc()
+            # END resetare
 
     mutare_calculator(level, tabla)
 
-    joc_terminat = joc_castigat()  # returneaza (True, X) / (False, None)
+    joc_terminat = joc_castigat(tabla, moves)  # returneaza (True, X) / (False, None)
     joc_finalizat = joc_terminat[0]
     afisare_tabla_joc()
 
@@ -258,8 +227,5 @@ while joc_finalizat is False and tabla_este_plina is False:
             tabla = {1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
             level = intrebare_dificultate_joc()
         # END resetare
-
-    if tabla_este_plina is True:
-        break
 
 # Caz remiza: 1 9 3 8 4
